@@ -2,7 +2,6 @@ package application;
 	
 
 
-import java.util.Random;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,7 +18,7 @@ import javafx.scene.text.TextAlignment;
 
 public class Main extends Application {
 	
-	// размер пол§
+	// размер пол€
 	private static final int width = 800;
 	private static final int height = 600;
 	
@@ -27,7 +26,7 @@ public class Main extends Application {
 	private static final int RACKET_WIDTH = 10;
 	private static final int RACKET_HEIGHT = 90;
 	
-	// радиус м§ча
+	// радиус м€ча
 	private static final int BALL_RAD = 30;
 	
 	// начальные координаты ракетки игрока
@@ -38,18 +37,20 @@ public class Main extends Application {
 	double compX = width - RACKET_WIDTH;
 	double compY = height/2;
 	
-	// координаты м§ча
+	// координаты м€ча
 	double ballX = width/2;
 	double ballY = height/2;
 	
 	// инструмент рисовани§
 	GraphicsContext gc;
 	
-	// скорость м§ча
-	double ballYSpeed = 1;
-	double ballXSpeed = 1;
+	// скорость м€ча
+	double ballYSpeed = 1.5;
+	double ballXSpeed = 1.5;
 	int a = 0;
 	int b = 0;
+	int count = 0;
+
 	
 	// игровой цикл
 	boolean gameStarted;
@@ -60,7 +61,13 @@ public class Main extends Application {
 		gc.fillRect(0, 0, width, height);			
 		// рисуем разделительную линию
 		gc.setFill(Color.YELLOW);
-		gc.fillRect(width/2, 0, 2, height);		
+		gc.fillRect(width/2, 0, 2, height);
+		//
+		gc.setStroke(Color.BLACK);
+		gc.setLineWidth(2.5);
+		gc.strokeText("0 : " + count, width/2, 30);	
+		//
+		gc.setFill(Color.YELLOW);
 		// рисуем м§ч(ballX <= (height +2.24*BALL_RAD))
 		if(gameStarted) {
 			//____________________________
@@ -73,26 +80,39 @@ public class Main extends Application {
 			if (ballX+BALL_RAD >= width-5 ) {
 				b = 1;
 			} 
-			if ((ballY > playerY-RACKET_HEIGHT/2) && (ballY < playerY+RACKET_HEIGHT/2 ) && (ballX == 0))
+			if ((ballY > playerY-RACKET_HEIGHT) && (ballY < playerY+RACKET_HEIGHT ) && (ballX >= 0) && (ballX <= 5)) {
 				b = 0;
+			}
 			
 			//____________________________
 			if (a == 1 ) {
-				ballYSpeed = -1;
+				ballYSpeed = -1.5;
 			}
 			if (a == 0 ) {
-				ballYSpeed = 1;
+				ballYSpeed = 1.5;
 			}
 			if (b == 1) {
-				ballXSpeed = -1;
+				ballXSpeed = -1.5;
 			}
 			if (b == 0) {
-				ballXSpeed = 1;
+				ballXSpeed = 1.5;
 			}
 			
 			//_____________________________
 			ballX+=ballXSpeed;
 			ballY+=ballYSpeed;
+			
+			if (ballX < -30) {
+				gameStarted = false;
+				ballX = width/2;
+				ballY = height/2;
+				ballYSpeed = 3;
+				ballXSpeed = 3;
+				count+=1;
+				
+				
+				
+			}
 			// логика - комп отбивает м€ч
 			if(ballX < width) {
 				compY = ballY - RACKET_HEIGHT/2;
@@ -101,6 +121,7 @@ public class Main extends Application {
 		} else {
 			gc.setStroke(Color.YELLOW);
 			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setLineWidth(1);
 			gc.strokeText("Click to start", width/2, height/2);			
 		}
 	
