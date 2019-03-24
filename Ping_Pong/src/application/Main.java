@@ -46,8 +46,10 @@ public class Main extends Application {
 	GraphicsContext gc;
 	
 	// скорость м§ча
-	double ballYSpeed = 3;
-	double ballXSpeed = 3;
+	double ballYSpeed = 1;
+	double ballXSpeed = 1;
+	int a = 0;
+	int b = 0;
 	
 	// игровой цикл
 	boolean gameStarted;
@@ -61,12 +63,34 @@ public class Main extends Application {
 		gc.fillRect(width/2, 0, 2, height);		
 		// рисуем м§ч(ballX <= (height +2.24*BALL_RAD))
 		if(gameStarted) {
-			if (ballY < height - BALL_RAD) {
-				ballYSpeed = ballYSpeed - 2*ballYSpeed;
-				System.out.println(ballX + "  "+ballY  );
+			//____________________________
+			if (ballY+BALL_RAD == height) {
+				a = 1;
 			} 
+			if (ballY == 0) {
+				a = 0;
+			} 
+			if (ballX+BALL_RAD >= width-5 ) {
+				b = 1;
+			} 
+			if ((ballY > playerY-RACKET_HEIGHT/2) && (ballY < playerY+RACKET_HEIGHT/2 ) && (ballX == 0))
+				b = 0;
 			
+			//____________________________
+			if (a == 1 ) {
+				ballYSpeed = -1;
+			}
+			if (a == 0 ) {
+				ballYSpeed = 1;
+			}
+			if (b == 1) {
+				ballXSpeed = -1;
+			}
+			if (b == 0) {
+				ballXSpeed = 1;
+			}
 			
+			//_____________________________
 			ballX+=ballXSpeed;
 			ballY+=ballYSpeed;
 			// логика - комп отбивает м€ч
